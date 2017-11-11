@@ -2344,7 +2344,7 @@ body {
   display: block;
   font-family: "Share Tech Mono";
   background: #000;
-  color: #5a5; }
+  color: #5ba; }
 
 h1 {
   font-family: "Faster One";
@@ -2401,5 +2401,3 @@ h1 {
     background-image: url("../assets/img/asteroid_states.png");
     background-position: 0 0;
     background-clip: content-box; }
-
-/*# sourceMappingURL=style.css.map */

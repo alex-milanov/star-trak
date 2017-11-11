@@ -6,7 +6,7 @@ const {
 	button, span
 } = require('iblokz-snabbdom-helpers');
 
-const asteroid = ({pos = {x: 20, y: 30}, rot = 0, size = 64, frame = 4}) =>
+const asteroid = ({pos = {x: 20, y: 30}, rot = 0, size = 64, frame = 1}) =>
 	section('.asteroid', {
 		style: {
 			top: `${pos.y}px`,
@@ -21,7 +21,7 @@ const asteroid = ({pos = {x: 20, y: 30}, rot = 0, size = 64, frame = 4}) =>
 	});
 
 module.exports = ({state, actions}) => section('#game', [
-	asteroid({}),
+	asteroid({size: 48, pos: {x: 620, y: 50}}),
 	img('#ship[src="assets/img/ship.svg"]', {
 		style: {
 			width: '64px',
