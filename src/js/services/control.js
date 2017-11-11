@@ -3,6 +3,8 @@
 const keyboard = require('../util/keyboard');
 const time = require('../util/time');
 
+let detach = () => {};
+
 const hook = ({state$, actions}) => {
 	const pressedKeys$ = keyboard.watch(['left', 'right', 'up', 'down', 'shift', 'w', 'a', 's', 'd']);
 
@@ -34,11 +36,12 @@ const hook = ({state$, actions}) => {
 				actions.rotate(df.direction, df.force);
 		});
 
-	return () => {
+	detach = () => {
 		gameLoop.dispose();
 	};
 };
 
 module.exports = {
-	hook
+	hook,
+	detach
 };
