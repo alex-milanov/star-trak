@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import url(//fonts.googleapis.com/css?family=Open+Sans);
+@import url("https://fonts.googleapis.com/css?family=Audiowide|Faster+One|Monoton|Ranga|Share+Tech+Mono");
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -2340,7 +2341,14 @@ body {
   padding: 0px;
   display: inline-block;
   box-sizing: border-box;
-  font-family: "Open Sans"; }
+  display: block;
+  font-family: "Share Tech Mono";
+  background: #000;
+  color: #5a5; }
+
+h1 {
+  font-family: "Faster One";
+  font-weight: 400; }
 
 .left {
   float: left; }
@@ -2354,37 +2362,38 @@ body {
 .text-right {
   text-align: right; }
 
-#ui .counter {
-  height: 32px;
-  line-height: 32px; }
-  #ui .counter > * {
-    float: left; }
-  #ui .counter > span {
-    height: 32px;
-    line-height: 32px;
-    display: inline-block;
-    font-size: 14px;
-    padding: 0px 10px; }
-  #ui .counter button {
+#ui header {
+  margin: 0px;
+  padding: 0px;
+  display: inline-block;
+  box-sizing: border-box;
+  height: 52px;
+  line-height: 52px;
+  width: 100%; }
+  #ui header h1 {
+    margin: 0px;
+    padding: 0px;
     display: inline-block;
     box-sizing: border-box;
-    height: 32px;
-    line-height: 12px;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 14px;
-    background: #fafafa;
-    color: #333;
-    border: 0px;
-    transition: box-shadow 0.3s, background 0.3s;
-    box-shadow: 1px 1px 2px #ccc;
-    outline: none; }
-    #ui .counter button:active {
-      padding: 11px 10px 9px 10px; }
-    #ui .counter button:active {
-      outline: none; }
-    #ui .counter button:hover {
-      box-shadow: 1px 1px 5px #aaa;
-      color: #000; }
+    height: 52px;
+    line-height: 52px;
+    width: 100%;
+    text-align: center;
+    font-size: 48px; }
+
+#ui #game {
+  position: fixed;
+  top: 52px;
+  width: 512px;
+  height: 512px;
+  left: 50%;
+  margin-left: -256px; }
+  #ui #game #ship {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -32px;
+    margin-left: -32px;
+    transform: rotate(0deg); }
 
 /*# sourceMappingURL=style.css.map */
