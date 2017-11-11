@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:assets && npm run build:js && npm run build:sass",
     "build:js": "browserify src/js/index.js -o dist/js/app.js --debug",
-    "build:sass": "node-sass --source-map dist/css/style.css.map --include-path=$(node bin/sass-paths.js) src/sass/style.sass dist/css/style.css",
+    "build:sass": "node bin/build-sass.js",
     "build:assets": "node bin/move-assets.js",
     "watch": "npm run watch:js & npm run watch:sass & npm run watch:assets & npm run livereload",
     "watch:js": "watchify -p browserify-hmr src/js/index.js -o dist/js/app.js --debug",
