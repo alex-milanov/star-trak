@@ -2395,5 +2395,11 @@ h1 {
     margin-top: -32px;
     margin-left: -32px;
     transform: rotate(0deg); }
+  #ui #game .asteroid {
+    position: fixed;
+    transform: rotate(0deg);
+    background-image: url("../assets/img/asteroid_states.png");
+    background-position: 0 0;
+    background-clip: content-box; }
 
 /*# sourceMappingURL=style.css.map */

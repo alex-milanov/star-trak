@@ -25,12 +25,17 @@ const hook = ({state$, actions}) => {
 			force: getForce(keys)
 		}));
 
-	let rotateSub = time.frame().withLatestFrom(directionForce$, (t, df) => df)
-		.filter(({force}) => force > 0)
-		.subscribe(({direction, force}) => actions.rotate(direction, force));
+	let gameLoop = time.frame().withLatestFrom(state$, directionForce$, (time, state, df) => ({time, state, df}))
+		// .filter(({df}) => df.force > 0)
+		.subscribe(({time, state, df}) => {
+			// move
+			// rotate ship
+			if (df.force > 0)
+				actions.rotate(df.direction, df.force);
+		});
 
 	return () => {
-		rotateSub.dispose();
+		gameLoop.dispose();
 	};
 };
 
