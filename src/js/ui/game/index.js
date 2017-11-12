@@ -2,7 +2,7 @@
 
 const {
 	header, div, section,
-	ul, li, a, h1, img,
+	ul, li, a, h1, img, p,
 	button, span
 } = require('iblokz-snabbdom-helpers');
 
@@ -23,11 +23,19 @@ const asteroid = ({pos = {x: 20, y: 30}, rot = 0, size = 48, frame = 1}) =>
 
 module.exports = ({state, actions}) => section('#game', [
 	asteroid({rot: state.game.asteroid.rot, pos: state.game.asteroid.pos}),
-	img('#ship[src="assets/img/Space_Ship.png"]', {
+	img('#ship[src="assets/img/space-ship.png"]', {
 		style: {
 			width: '64px',
 			height: '64px',
 			transform: `rotate(${state.game.ship.rotation}deg)`
+		}
+	}),
+	p('#chord', 
+		{style: {
+		}
+	}),
+	p('#score', 
+		{style: {
 		}
 	})
 ]);
