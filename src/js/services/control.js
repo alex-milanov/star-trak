@@ -7,7 +7,7 @@ const {obj} = require('iblokz-data');
 let detach = () => {};
 
 const hook = ({state$, actions}) => {
-	const pressedKeys$ = keyboard.watch(['left', 'right', 'up', 'down', 'shift', 'w', 'a', 's', 'd']);
+	const pressedKeys$ = keyboard.watch(['left', 'right', 'up', 'down', 'shift']);
 
 	const getDirection = keys => ([
 		(keys.left || keys.a) && -1 || (keys.right || keys.d) && 1 || 0,
@@ -30,15 +30,20 @@ const hook = ({state$, actions}) => {
 
 	const keyNoteMap = {
 		z: 'C',
+		s: 'C#',
 		x: 'D',
+		d: 'D#',
 		c: 'E',
 		v: 'F',
+		g: 'F#',
 		b: 'G',
+		h: 'G#',
 		n: 'A',
-		m: 'H'
+		j: 'A#',
+		m: 'B'
 	};
 
-	keyboard.watch(['z', 'x', 'c', 'v', 'b', 'n', 'm'])
+	keyboard.watch(['z', 's', 'x', 'd', 'c', 'v', 'g', 'b', 'h', 'n', 'j', 'm'])
 		.map(keys => (console.log(keys), keys))
 		.map(keys => Object.keys(keys)
 			.filter(key => keys[key])
@@ -48,15 +53,18 @@ const hook = ({state$, actions}) => {
 	// const noteOff$ = keyboard.off('z');
 	// .subscribe(())
 
+	time.frame()
+		.withLatestFrom(directionForce$, (t, df) => df)
+		.filter(df => df.force > 0)
+		.subscribe(df => actions.rotate(df.direction, df.force));
+
 	let gameLoop = time.frame()
-		.withLatestFrom(state$, directionForce$, (time, state, df) => ({time, state, df}))
+		.withLatestFrom(state$, (time, state) => ({time, state}))
 		// .filter(({df}) => df.force > 0)
-		.subscribe(({time, state, df}) => {
+		.subscribe(({time, state}) => {
 			// move
 			// rotate ship
 			actions.moveAsteroid();
-			if (df.force > 0)
-				actions.rotate(df.direction, df.force);
 			// if (no) {
 			// 	console.log('Notes off');
 			// 	actions.notesOff();

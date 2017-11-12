@@ -22,7 +22,7 @@ const synth = {
 		detune: -3
 	}),
 	vca: audio.vca({
-		volume: 1,
+		volume: 0.1,
 		attack: 0.19,
 		decay: 0.55,
 		sustain: 0.5,
@@ -63,6 +63,8 @@ const noteOn = (synth, note, velocity) => {
 
 	voices[note] = voice;
 
+	console.log(voice);
+
 	synth.vca.through.gain.cancelScheduledValues(0);
 
 	const vca1Changes = [].concat(
@@ -99,7 +101,9 @@ let detach = () => {};
 
 const hook = ({state$, actions}) => {
 	audio.connect(bank.gameOver.output, audio.context.destination);
-	audio.chain(synth.vca, synth.vcf, synth.reverb, audio.context.destination);
+	audio.connect(synth.vca, synth.vcf);
+	audio.connect(synth.vcf, synth.reverb);
+	audio.connect(synth.reverb, audio.context.destination);
 	// audio.start(bank.gameOver);
 	state$.subscribe(state => {
 
@@ -119,6 +123,7 @@ const hook = ({state$, actions}) => {
 				.forEach(
 					note => noteOff(synth, note, 0.7)
 				);
+			console.log(pressedKeys, voices);
 		});
 };
 
