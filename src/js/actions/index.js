@@ -12,12 +12,12 @@ const initial = {
 			rotation: 0
 		},
 		audio: {
-			note: 'C',
+			note: 'a',
 			pressed: []
 		},
 		settings: {
 			moveSpeed: 1,
-			lifes: 4,
+			lifes: 3,
 			points: 0
 		},
 		asteroid: {
@@ -55,7 +55,7 @@ function getShipPosition(state){
 }
 
 function newAsteroid(state){
-	const allChords = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'H4'];
+	const allChords = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'];
 	const idx = Math.floor(Math.random() * 7);
 	let asteroid = state.game.asteroid;
 	asteroid.pos = { x: 370 + Math.random()*530, y: 50 };
