@@ -15,7 +15,7 @@ const hook = ({state$, actions}) => {
 		(keys.up || keys.w) && 1 || (keys.down || keys.s) && -1 || 0
 	]);
 
-	const getForce = keys => (keys.shift && 10 || 5) * ((
+	const getForce = keys => (keys.shift && 6 || 4) * ((
 		keys.left || keys.right || keys.up || keys.down
 		|| keys.a || keys.d || keys.w || keys.s
 	) ? 1 : 0);
@@ -56,13 +56,21 @@ const hook = ({state$, actions}) => {
 	time.frame()
 		.withLatestFrom(directionForce$, (t, df) => df)
 		.filter(df => df.force > 0)
-		.subscribe(df => actions.rotate(df.direction, df.force));
+		.subscribe(df => actions.move(df.direction, df.force));
 
 	let gameLoop = time.frame()
 		.withLatestFrom(state$, (time, state) => ({time, state}))
 		// .filter(({df}) => df.force > 0)
 		.subscribe(({time, state}) => {
 			actions.moveAsteroid();
+
+			if (state.game.settings.lifes === 0) {
+				actions.set(['game', 'ship', 'pos'], {
+					x: state.viewport.screen.width / 2,
+					y: state.viewport.screen.height / 2
+				});
+				actions.set(['game', 'settings', 'lifes'], 4);
+			}
 		});
 
 	detach = () => {

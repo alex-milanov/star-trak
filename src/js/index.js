@@ -19,6 +19,7 @@ const state$ = new Rx.BehaviorSubject();
 let control = require('./services/control');
 let audio = require('./services/audio');
 let midi = require('./services/midi');
+let viewport = require('./services/viewport');
 
 // hot reloading
 if (module.hot) {
@@ -71,6 +72,7 @@ if (module.hot) {
 actions$
 	.startWith(() => actions.initial)
 	.scan((state, change) => change(state), {})
+	.map(state => (console.log(state), state))
 	.subscribe(state => state$.onNext(state));
 
 state$
@@ -85,6 +87,7 @@ vdom.patchStream(ui$, '#ui');
 control.hook({state$, actions});
 audio.hook({state$, actions});
 midi.hook({state$, actions});
+viewport.hook({state$, actions});
 
 // livereload impl.
 if (module.hot) {

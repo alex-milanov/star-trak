@@ -2361,8 +2361,9 @@ body {
   right: 0px;
   font-family: "Share Tech Mono";
   background: #000;
-  color: #5b7;
-  box-shadow: inset 0px 0px 256px 0px rgba(103, 91, 137, 0.4); }
+  background-image: url("../assets/img/starfield.gif");
+  color: #57b;
+  box-shadow: inset 0px 0px 324px 0px rgba(103, 91, 137, 0.4); }
 
 h1 {
   font-family: "Faster One";
@@ -2406,26 +2407,19 @@ h1 {
 
 #ui #game {
   position: fixed;
-  top: 52px;
-  width: 512px;
-  height: 512px;
-  left: 50%;
-  margin-left: -256px;
-  background-image: url("../assets/img/BAckground.png");
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
   background-size: cover; }
   #ui #game #ship {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -32px;
-    margin-left: -32px;
     transform: rotate(0deg); }
   #ui #game .asteroid {
     position: fixed;
     transform: rotate(0deg);
-    background-image: url("../assets/img/Asteroid_01.png");
-    background-position: 0 0;
-    background-clip: content-box; }
+    background-position: center;
+    background-repeat: no-repeat; }
   #ui #game #chord {
     font-size: x-large;
     padding: 10px; }
