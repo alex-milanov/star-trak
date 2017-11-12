@@ -71,8 +71,11 @@ if (module.hot) {
 actions$
 	.startWith(() => actions.initial)
 	.scan((state, change) => change(state), {})
-	.map(state => (console.log(state), state))
 	.subscribe(state => state$.onNext(state));
+
+state$
+	.distinctUntilChanged(state => state.pressedKeys + Object.assign({}, state.game, {asteroid: {}}))
+	.subscribe(state => console.log(state));
 
 // state -> ui
 const ui$ = state$.map(state => ui({state, actions}));

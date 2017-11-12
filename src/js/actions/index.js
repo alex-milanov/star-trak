@@ -12,20 +12,22 @@ const initial = {
 			rotation: 0
 		},
 		audio: {
-			note: 'a'
+			note: 'a',
+			pressed: []
 		},
 		settings: {
 			moveSpeed: 1,
 			lifes: 3000,
 			points: 0
 		},
-		asteroid:{
+		asteroid: {
 			pos: {x: 620, y: 50},
 			chord: '0',
 			frame: 0,
 			rot: 0
 		}
-	}
+	},
+	pressedKeys: []
 };
 
 // actions
@@ -40,7 +42,6 @@ const rotate = (direction, force) => (
 	state => obj.patch(state, ['game', 'ship', 'rotation'],
 		(state.game.ship.rotation + direction[0] * force) % 360
 	));
-
 
 function crashShip(state){
 	if (state.game.settings.lifes > 0)
@@ -65,13 +66,17 @@ function newAsteroid(state){
 	return asteroid;
 }
 
-function calcNewPosition(oldPos, state){
+function getShipPosition(state) {
+	return {x: 620, y: 255};
+}
+
+function calcNewPosition(oldPos, state) {
 	let shipPos = getShipPosition(state);
-	let normFactor = Math.sqrt((shipPos.x - oldPos.x)*(shipPos.x - oldPos.x)+
-							   (shipPos.y - oldPos.y)*(shipPos.y - oldPos.y));
-	if (normFactor >= 1){
-		let dx = (shipPos.x - oldPos.x)/normFactor * state.game.settings.moveSpeed;
-		let dy = (shipPos.y - oldPos.y)/normFactor * state.game.settings.moveSpeed;
+	let normFactor = Math.sqrt((shipPos.x - oldPos.x) * (shipPos.x - oldPos.x) +
+		(shipPos.y - oldPos.y) * (shipPos.y - oldPos.y));
+	if (normFactor >= 1) {
+		let dx = (shipPos.x - oldPos.x) / normFactor * state.game.settings.moveSpeed;
+		let dy = (shipPos.y - oldPos.y) / normFactor * state.game.settings.moveSpeed;
 
 		return {
 			x: oldPos.x + dx,
@@ -82,6 +87,14 @@ function calcNewPosition(oldPos, state){
 		crashShip(state);
 		return { x: 0, y: 0 };
 	}
+}
+
+function pressedNotes(oldNotes, state, note) {
+	console.log('Pressed note:', note);
+	console.log('oldNotes', oldNotes);
+	// TODO: possibly detect chord
+	oldNotes.push(note);
+	return oldNotes;
 }
 
 function changeAsteroid(state){
@@ -108,6 +121,14 @@ const moveAsteroid = () => (
 	state => obj.patch(state, ['game', 'asteroid'], changeAsteroid(state))
 );
 
+const playNote = note => (
+	state => obj.patch(state, ['game', 'audio', 'pressed'], pressedNotes(state.game.audio.pressed, state, note))
+);
+
+const notesOff = () => (
+	state => obj.patch(state, ['game', 'audio', 'pressed'], [])
+);
+
 module.exports = {
 	initial,
 	counter,
@@ -115,5 +136,7 @@ module.exports = {
 	toggle,
 	arrToggle,
 	rotate,
-	moveAsteroid
+	moveAsteroid,
+	playNote,
+	notesOff
 };

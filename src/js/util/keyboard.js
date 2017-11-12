@@ -7,7 +7,8 @@ const {obj} = require('iblokz-data');
 
 const keyDown$ = $.fromEvent(document, 'keydown');
 const keyUp$ = $.fromEvent(document, 'keyup');
-const keyAction$ = $.merge(keyDown$, keyUp$).map(ev => (console.log(ev), ev));
+const keyAction$ = $.merge(keyDown$, keyUp$).share();
+	// .map(ev => (console.log(ev), ev));
 
 const keyAliases = {
 	'ArrowUp': 'up',
@@ -32,8 +33,10 @@ const watch = keyList => keyAction$
 	.share();
 
 const on = key => keyDown$.filter(ev => parseKey(ev) === key);
+const off = key => keyUp$.filter(ev => parseKey(ev) === key);
 
 module.exports = {
 	watch,
-	on
+	on,
+	off
 };
