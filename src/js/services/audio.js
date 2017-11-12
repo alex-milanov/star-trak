@@ -23,7 +23,7 @@ const synth = {
 	}),
 	vca: audio.vca({
 		volume: 0.1,
-		attack: 0.19,
+		attack: 0,
 		decay: 0.55,
 		sustain: 0.5,
 		release: 0.43
@@ -105,9 +105,25 @@ const hook = ({state$, actions}) => {
 	audio.connect(synth.vcf, synth.reverb);
 	audio.connect(synth.reverb, audio.context.destination);
 	// audio.start(bank.gameOver);
-	state$.subscribe(state => {
 
-	});
+	// audio.connect(bank.engineSystemsStartup.output, audio.context.destination);
+	// audio.start(bank.engineSystemsStartup);
+
+	setTimeout(() => {
+		audio.connect(bank.engineAmb.output, audio.context.destination);
+		audio.start(bank.engineAmb);
+	}, 10000);
+
+	state$
+		.distinctUntilChanged(state => state.game.asteroid.hited)
+		.filter(state => state.game.asteroid.hited)
+		.subscribe(() => {
+			var laser = sampler.create(null, bank.laserCanon01.output.buffer);
+			setTimeout(() => {
+				audio.connect(laser.output, audio.context.destination);
+				audio.start(laser);
+			});
+		});
 
 	state$
 		.distinctUntilChanged(state => state.pressedKeys)

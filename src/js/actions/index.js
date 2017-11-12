@@ -44,26 +44,26 @@ const rotate = (direction, force) => (
 		(state.game.ship.rotation + direction[0] * force) % 360
 	));
 
-function crashShip(state){
+function crashShip(state) {
 	if (state.game.settings.lifes > 0)
 		--state.game.settings.lifes;
 	else
 		window.alert('You are dead!!!');
 }
 
-function getShipPosition(state){
+function getShipPosition(state) {
 	return {x: 620, y: 255};
 }
 
-function newAsteroid(state){
+function newAsteroid(state) {
 	const allChords = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'];
 	const idx = Math.floor(Math.random() * 7);
 	let asteroid = state.game.asteroid;
-	asteroid.pos = { x: 370 + Math.random()*530, y: 50 };
+	asteroid.pos = {x: 370 + Math.random() * 530, y: 50};
 	asteroid.chord = allChords[idx];
 	asteroid.hited = false;
 
-	document.getElementById('chord').innerHTML = 'Play: '  + (asteroid.chord);
+	document.getElementById('chord').innerHTML = 'Play: ' + (asteroid.chord);
 	document.getElementById('score').innerHTML = 'Score: ' + (state.game.settings.points) + ' points';
 	document.getElementById('lifes').innerHTML = 'Lifes: ' + (state.game.settings.lifes);
 	return asteroid;
@@ -86,10 +86,9 @@ function calcNewPosition(oldPos, state) {
 			y: oldPos.y + dy
 		};
 	}
-	else{
-		crashShip(state);
-		return { x: 0, y: 0 };
-	}
+
+	crashShip(state);
+	return {x: 0, y: 0};
 }
 
 function pressedNotes(oldNotes, state, note) {
@@ -100,14 +99,14 @@ function pressedNotes(oldNotes, state, note) {
 	return oldNotes;
 }
 
-function changeAsteroid(state){
+function changeAsteroid(state) {
 	let asteroid = state.game.asteroid;
 
 	if (asteroid.hited || asteroid.chord == '0') return newAsteroid(state);
 
-	asteroid.rot += Math.random()*5;
+	asteroid.rot += Math.random() * 5;
 
-	if (state.pressedKeys.indexOf(asteroid.chord)>=0){
+	if (state.pressedKeys.indexOf(asteroid.chord) >= 0) {
 		asteroid.hited = true;
 		state.game.settings.points += 100;
 		return asteroid;
@@ -116,8 +115,7 @@ function changeAsteroid(state){
 	asteroid.pos = calcNewPosition(asteroid.pos, state);
 	if (asteroid.pos.y < 4)
 		return newAsteroid(state);
-	else
-		return asteroid;
+	return asteroid;
 }
 
 const moveAsteroid = () => (
