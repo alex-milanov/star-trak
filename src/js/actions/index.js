@@ -11,6 +11,9 @@ const initial = {
 		ship: {
 			rotation: 0
 		},
+		audio: {
+			note: 'C'
+		},
 		settings: {
 			moveSpeed: 1 //pixels per tick
 		},
