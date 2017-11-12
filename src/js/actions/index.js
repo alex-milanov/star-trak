@@ -17,6 +17,7 @@ const initial = {
 		asteroid:{
 			pos: {x: 620, y: 50},
 			frame: 0,
+			rot: 0
 		}
 	}
 };
@@ -46,6 +47,7 @@ function calcNewPosition(oldPos, state){
 		let dx = (shipPos.x - oldPos.x)/normFactor * state.game.settings.moveSpeed;
 		let dy = (shipPos.y - oldPos.y)/normFactor * state.game.settings.moveSpeed;
 
+		console.log('x', oldPos.x + dx, 'y', oldPos.y + dy);
 		return {
 			x: oldPos.x + dx,
 			y: oldPos.y + dy
