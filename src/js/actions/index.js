@@ -15,10 +15,12 @@ const initial = {
 			note: 'C'
 		},
 		settings: {
-			moveSpeed: 1 //pixels per tick
+			moveSpeed: 1,
+			lifes: 3
 		},
 		asteroid:{
 			pos: {x: 620, y: 50},
+			chord: 'A',
 			frame: 0,
 			rot: 0
 		}
@@ -37,6 +39,14 @@ const rotate = (direction, force) => (console.log(direction, force),
 	state => obj.patch(state, ['game', 'ship', 'rotation'],
 		(state.game.ship.rotation + direction[0] * force) % 360
 	));
+
+
+function crashShip(state){
+	if (state.game.settings.lifes > 0)
+		--state.game.settings.lifes
+	else
+		window.alert('You are dead!!!');
+}
 
 function getShipPosition(state){
 	return {x: 620, y: 255};
@@ -57,6 +67,7 @@ function calcNewPosition(oldPos, state){
 		};
 	}
 	else{
+		crashShip(state);
 		return {
 			x: Math.random() * 1000,
 			y: 50
@@ -64,12 +75,26 @@ function calcNewPosition(oldPos, state){
 	}
 }
 
+function changeAsteroid(state){
+	let asteroid = state.game.asteroid;
+
+	asteroid.rot += 0.5;
+	if (state.game.audio.note == asteroid.chord){
+		if (asteroid.frame > 4){
+			state.audio.note = '0';
+		}
+		else {
+			++asteroid.frame;
+		}
+	}
+	asteroid.pos = calcNewPosition(asteroid.pos, state);
+	console.log('------------>', asteroid);
+	return asteroid;
+}
+
 const moveAsteroid = () => (
-	state => (obj.patch(
-				obj.patch(state, ['game', 'asteroid', 'rot'], state.game.asteroid.rot + 0.5), 
-				['game', 'asteroid', 'pos'], calcNewPosition(state.game.asteroid.pos, state))
-			  )
-);
+	state => obj.patch(state, ['game', 'asteroid'], changeAsteroid(state)
+));
 
 module.exports = {
 	initial,

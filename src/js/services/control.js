@@ -48,11 +48,11 @@ const hook = ({state$, actions}) => {
 		.subscribe(({time, state, df, pn}) => {
 			// move
 			// rotate ship
-			actions.moveAsteroid();
 			if (df.force > 0)
 				actions.rotate(df.direction, df.force);
 			if (pn.note && pn.note != '')
 				console.log('Pressed note:', pn.note);
+			actions.moveAsteroid();
 		});
 
 	detach = () => {
