@@ -68,7 +68,7 @@ function calcNewPosition(oldPos, state){
 	else{
 		crashShip(state);
 		return {
-			x: Math.random() * 1000,
+			x: 370 + Math.random()*530,
 			y: 50
 		}
 	}
@@ -77,17 +77,13 @@ function calcNewPosition(oldPos, state){
 function changeAsteroid(state){
 	let asteroid = state.game.asteroid;
 
-	asteroid.rot += 0.5;
+	asteroid.rot += Math.random()*5;
+
 	if (state.game.audio.note == asteroid.chord){
-		if (asteroid.frame > 4){
-			asteroid.chord = '0';
-		}
-		else {
-			asteroid.frame = asteroid.frame+1;
-			console.log('----------->', asteroid);
-			state.game.audio.note = '0';
-		}
+		asteroid.chord = '0';
+		console.log('----------->', asteroid);
 	}
+
 	asteroid.pos = calcNewPosition(asteroid.pos, state);
 	return asteroid;
 }
