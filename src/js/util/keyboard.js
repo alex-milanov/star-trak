@@ -7,7 +7,8 @@ const {obj} = require('iblokz-data');
 
 const keyDown$ = $.fromEvent(document, 'keydown');
 const keyUp$ = $.fromEvent(document, 'keyup');
-const keyAction$ = $.merge(keyDown$, keyUp$).map(ev => (console.log(ev), ev));
+const keyAction$ = $.merge(keyDown$, keyUp$).share();
+	// .map(ev => (console.log(ev), ev));
 
 const keyAliases = {
 	'ArrowUp': 'up',

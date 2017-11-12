@@ -22,7 +22,7 @@ const synth = {
 		detune: -3
 	}),
 	vca: audio.vca({
-		volume: 0.14,
+		volume: 1,
 		attack: 0.19,
 		decay: 0.55,
 		sustain: 0.5,
@@ -41,15 +41,27 @@ const synth = {
 	})
 };
 
+let voices = {};
+
 const noteOn = (synth, note, velocity) => {
 	const now = audio.context.currentTime;
 	const time = now + 0.0001;
 
-	const freq = audio.noteToFrequency(note.key + note.octave);
+	const freq = audio.noteToFrequency(note);
 
-	// if (synth.vco) audio.stop(synth.vco);
-	synth.vco = audio.start(audio.vco(Object.assign({}, synth.vco.prefs, {freq})));
-	synth.vco = audio.connect(synth.vco, synth.vca);
+	let voice = voices[note] || false;
+
+	if (voice) audio.stop(voice);
+	voice = audio.vco({
+		on: true,
+		type: 'square',
+		detune: -3,
+		freq
+	});
+	voice = audio.start(voice);
+	voice = audio.connect(voice, synth.vca);
+
+	voices[note] = voice;
 
 	synth.vca.through.gain.cancelScheduledValues(0);
 
@@ -70,37 +82,45 @@ const noteOff = (synth, note, velocity) => {
 	const now = audio.context.currentTime;
 	const time = now + 0.0001;
 
-	synth.vca.through.gain.cancelScheduledValues(0);
-	synth.vca.through.gain.setValueCurveAtTime(new Float32Array([synth.vca.through.gain.value, 0]),
-			time, synth.vca.prefs.release > 0 && synth.vca.prefs.release || 0.00001);
+	let voice = voices[note] || false;
+	if (voice) {
+		synth.vca.through.gain.cancelScheduledValues(0);
+		synth.vca.through.gain.setValueCurveAtTime(new Float32Array([synth.vca.through.gain.value, 0]),
+				time, synth.vca.prefs.release > 0 && synth.vca.prefs.release || 0.00001);
 
-	audio.stop(synth.vco, time + (synth.vca.prefs.release > 0 && synth.vca.prefs.release || 0.00001));
+		audio.stop(voice, time + (synth.vca.prefs.release > 0 && synth.vca.prefs.release || 0.00001));
+		setTimeout(() => {
+			delete voices[note];
+		});
+	}
 };
 
 let detach = () => {};
 
 const hook = ({state$, actions}) => {
+	audio.connect(bank.gameOver.output, audio.context.destination);
+	audio.chain(synth.vca, synth.vcf, synth.reverb, audio.context.destination);
+	// audio.start(bank.gameOver);
 	state$.subscribe(state => {
-		audio.connect(bank.gameOver.output, audio.context.destination);
-		audio.chain(synth.vca, synth.vcf, synth.reverb, audio.context.destination);
-		// audio.start(bank.gameOver);
+
 	});
 
 	state$
-		.distinctUntilChanged(state => state.game.audio.pressed)
-		.map(state => (console.log(state), state))
-		.filter(state => state.game.audio.pressed.length > 0)
-		.map(state => state.game.audio.pressed)
-		.subscribe(pressed => {
-			const note = {
-				key: pressed[pressed.length - 1],
-				octave: 4
-			}
-			console.log('Playing note', note.key);
-			noteOn(synth, note, 0.8);
+		.distinctUntilChanged(state => state.pressedKeys)
+		// .map(state => (console.log(state), state))
+		// .filter(state => state.game.pressedKeys.length > 0)
+		.map(state => state.pressedKeys)
+		.subscribe(pressedKeys => {
+			pressedKeys.filter(note => !voices[note])
+				.forEach(
+					note => noteOn(synth, note, 0.7)
+				);
+			Object.keys(voices).filter(note => pressedKeys.indexOf(note) === -1)
+				.forEach(
+					note => noteOff(synth, note, 0.7)
+				);
 		});
 };
-console.log('123');
 
 module.exports = {
 	hook,

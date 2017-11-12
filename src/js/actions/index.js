@@ -16,14 +16,15 @@ const initial = {
 			pressed: []
 		},
 		settings: {
-			moveSpeed: 1 //pixels per tick
+			moveSpeed: 1 // pixels per tick
 		},
-		asteroid:{
+		asteroid: {
 			pos: {x: 620, y: 50},
 			frame: 0,
 			rot: 0
 		}
-	}
+	},
+	pressedKeys: []
 };
 
 // actions
@@ -39,17 +40,17 @@ const rotate = (direction, force) => (console.log(direction, force),
 		(state.game.ship.rotation + direction[0] * force) % 360
 	));
 
-function getShipPosition(state){
+function getShipPosition(state) {
 	return {x: 620, y: 255};
 }
 
-function calcNewPosition(oldPos, state){
+function calcNewPosition(oldPos, state) {
 	let shipPos = getShipPosition(state);
-	let normFactor = Math.sqrt((shipPos.x - oldPos.x)*(shipPos.x - oldPos.x)+
-							   (shipPos.y - oldPos.y)*(shipPos.y - oldPos.y));
-	if (normFactor >= 1){
-		let dx = (shipPos.x - oldPos.x)/normFactor * state.game.settings.moveSpeed;
-		let dy = (shipPos.y - oldPos.y)/normFactor * state.game.settings.moveSpeed;
+	let normFactor = Math.sqrt((shipPos.x - oldPos.x) * (shipPos.x - oldPos.x) +
+		(shipPos.y - oldPos.y) * (shipPos.y - oldPos.y));
+	if (normFactor >= 1) {
+		let dx = (shipPos.x - oldPos.x) / normFactor * state.game.settings.moveSpeed;
+		let dy = (shipPos.y - oldPos.y) / normFactor * state.game.settings.moveSpeed;
 
 		// console.log('x', oldPos.x + dx, 'y', oldPos.y + dy);
 		return {
@@ -57,30 +58,29 @@ function calcNewPosition(oldPos, state){
 			y: oldPos.y + dy
 		};
 	}
-	else{
-		return {
-			x: Math.random() * 1000,
-			y: 50
-		}
-	}
+
+	return {
+		x: Math.random() * 1000,
+		y: 50
+	};
 }
 
 function pressedNotes(oldNotes, state, note) {
 	console.log('Pressed note:', note);
 	console.log('oldNotes', oldNotes);
-	// TODO: possibly detect chord	
+	// TODO: possibly detect chord
 	oldNotes.push(note);
 	return oldNotes;
 }
 
 const moveAsteroid = () => (
 	state => (obj.patch(
-				obj.patch(state, ['game', 'asteroid', 'rot'], state.game.asteroid.rot + 0.5), 
-				['game', 'asteroid', 'pos'], calcNewPosition(state.game.asteroid.pos, state))
-			  )
+		obj.patch(state, ['game', 'asteroid', 'rot'], state.game.asteroid.rot + 0.5),
+		['game', 'asteroid', 'pos'], calcNewPosition(state.game.asteroid.pos, state))
+	)
 );
 
-const playNote = (note) => (
+const playNote = note => (
 	state => obj.patch(state, ['game', 'audio', 'pressed'], pressedNotes(state.game.audio.pressed, state, note))
 );
 

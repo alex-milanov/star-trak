@@ -2,6 +2,7 @@
 
 const keyboard = require('../util/keyboard');
 const time = require('../util/time');
+const {obj} = require('iblokz-data');
 
 let detach = () => {};
 
@@ -27,37 +28,35 @@ const hook = ({state$, actions}) => {
 			force: getForce(keys)
 		}));
 
-	const getNote = keys => (
-		keys.z && 'C' ||
-		keys.x && 'D' ||
-		keys.c && 'E' ||
-		keys.v && 'F' ||
-		keys.b && 'G' ||
-		keys.n && 'A' ||
-		keys.m && 'H' || '');
+	const keyNoteMap = {
+		z: 'C',
+		x: 'D',
+		c: 'E',
+		v: 'F',
+		b: 'G',
+		n: 'A',
+		m: 'H'
+	};
 
-	const pressedNotes$ = keyboard.watch(['z', 'x', 'c', 'v', 'b', 'n', 'm']);
-	const note$ = pressedNotes$
-		.map(keys => (console.log('note keys', keys), keys))
-		.map(keys => ({
-			note: getNote(keys)
-		}));
+	keyboard.watch(['z', 'x', 'c', 'v', 'b', 'n', 'm'])
+		.map(keys => (console.log(keys), keys))
+		.map(keys => Object.keys(keys)
+			.filter(key => keys[key])
+			.map(key => keyNoteMap[key] + '4'))
+		.subscribe(pressedKeys => actions.set('pressedKeys', pressedKeys));
 
-	const noteOff$ = keyboard.off('z');
-	//.subscribe(())
+	// const noteOff$ = keyboard.off('z');
+	// .subscribe(())
 
-	let gameLoop = time.frame().withLatestFrom(state$, directionForce$, note$, noteOff$, (time, state, df, pn, no) => ({time, state, df, pn, no}))
+	let gameLoop = time.frame()
+		.withLatestFrom(state$, directionForce$, (time, state, df) => ({time, state, df}))
 		// .filter(({df}) => df.force > 0)
-		.subscribe(({time, state, df, pn, no}) => {
+		.subscribe(({time, state, df}) => {
 			// move
 			// rotate ship
 			actions.moveAsteroid();
 			if (df.force > 0)
 				actions.rotate(df.direction, df.force);
-			if (pn.note) {
-				if (pn.note != '')
-					actions.playNote(pn.note);
-			}
 			// if (no) {
 			// 	console.log('Notes off');
 			// 	actions.notesOff();
