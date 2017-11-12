@@ -32,6 +32,7 @@ const hook = ({state$, actions}) => {
 		.subscribe(({time, state, df}) => {
 			// move
 			// rotate ship
+			actions.moveAsteroid();
 			if (df.force > 0)
 				actions.rotate(df.direction, df.force);
 		});
