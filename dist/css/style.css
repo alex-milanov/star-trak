@@ -1,6 +1,4 @@
 @charset "UTF-8";
-@import url(//fonts.googleapis.com/css?family=Open+Sans);
-@import url("https://fonts.googleapis.com/css?family=Audiowide|Faster+One|Monoton|Ranga|Share+Tech+Mono");
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -2336,6 +2334,20 @@ html {
 *, *::after, *::before {
   box-sizing: inherit; }
 
+@font-face {
+  font-family: 'Faster One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../assets/fonts/Faster+One_400_normal.eot);
+  src: local("☺"), url(../assets/fonts/Faster+One_400_normal.eot?#iefix) format("embedded-opentype"), url(../assets/fonts/Faster+One_400_normal.woff) format("woff"), url(../assets/fonts/Faster+One_400_normal.ttf) format("truetype"), url(../assets/fonts/Faster+One_400_normal.svg#Faster+One_400_normal) format("svg"); }
+
+@font-face {
+  font-family: 'Share Tech Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../assets/fonts/Share+Tech+Mono_400_normal.eot);
+  src: local("☺"), url(../assets/fonts/Share+Tech+Mono_400_normal.eot?#iefix) format("embedded-opentype"), url(../assets/fonts/Share+Tech+Mono_400_normal.woff) format("woff"), url(../assets/fonts/Share+Tech+Mono_400_normal.ttf) format("truetype"), url(../assets/fonts/Share+Tech+Mono_400_normal.svg#Share+Tech+Mono_400_normal) format("svg"); }
+
 body {
   margin: 0px;
   padding: 0px;
@@ -2344,7 +2356,7 @@ body {
   display: block;
   font-family: "Share Tech Mono";
   background: #000;
-  color: #5ba; }
+  color: #5b7; }
 
 h1 {
   font-family: "Faster One";
@@ -2379,7 +2391,10 @@ h1 {
     line-height: 52px;
     width: 100%;
     text-align: center;
-    font-size: 48px; }
+    font-size: 48px;
+    background: -webkit-linear-gradient(#357, #5ef);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; }
 
 #ui #game {
   position: fixed;

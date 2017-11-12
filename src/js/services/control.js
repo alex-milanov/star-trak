@@ -3,6 +3,8 @@
 const keyboard = require('../util/keyboard');
 const time = require('../util/time');
 
+let detach = () => {};
+
 const hook = ({state$, actions}) => {
 	const pressedKeys$ = keyboard.watch(['left', 'right', 'up', 'down', 'shift', 'w', 'a', 's', 'd']);
 
@@ -46,17 +48,19 @@ const hook = ({state$, actions}) => {
 		.subscribe(({time, state, df, pn}) => {
 			// move
 			// rotate ship
+			actions.moveAsteroid();
 			if (df.force > 0)
 				actions.rotate(df.direction, df.force);
 			if (pn.note && pn.note != '')
 				console.log('Pressed note:', pn.note);
 		});
 
-	return () => {
+	detach = () => {
 		gameLoop.dispose();
 	};
 };
 
 module.exports = {
-	hook
+	hook,
+	detach
 };

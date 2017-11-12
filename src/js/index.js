@@ -17,7 +17,8 @@ const state$ = new Rx.BehaviorSubject();
 
 // services
 let control = require('./services/control');
-let controlDetach = null;
+let audio = require('./services/audio');
+let midi = require('./services/midi');
 
 // hot reloading
 if (module.hot) {
@@ -37,10 +38,28 @@ if (module.hot) {
 	// control
 	module.hot.accept("./services/control", function() {
 		console.log('updating control');
-		controlDetach();
+		control.detach();
 		// console.log('updating render3d');
 		control = require('./services/control');
-		controlDetach = control.hook({state$, actions});
+		control.hook({state$, actions});
+		// actions.set('needsRefresh', true);
+		// state$.connect();
+	});
+	module.hot.accept("./services/audio", function() {
+		console.log('updating audio');
+		audio.detach();
+		// console.log('updating render3d');
+		audio = require('./services/audio');
+		audio.hook({state$, actions});
+		// actions.set('needsRefresh', true);
+		// state$.connect();
+	});
+	module.hot.accept("./services/midi", function() {
+		console.log('updating midi');
+		midi.detach();
+		// console.log('updating render3d');
+		midi = require('./services/midi');
+		midi.hook({state$, actions});
 		// actions.set('needsRefresh', true);
 		// state$.connect();
 	});
@@ -60,7 +79,9 @@ const ui$ = state$.map(state => ui({state, actions}));
 vdom.patchStream(ui$, '#ui');
 
 // hooks
-controlDetach = control.hook({state$, actions});
+control.hook({state$, actions});
+audio.hook({state$, actions});
+midi.hook({state$, actions});
 
 // livereload impl.
 if (module.hot) {
