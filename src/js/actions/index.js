@@ -62,7 +62,10 @@ function calcNewPosition(oldPos, state){
 }
 
 const moveAsteroid = () => (
-	state => obj.patch(state, ['game', 'asteroid', 'pos'], calcNewPosition(state.game.asteroid.pos, state))
+	state => (obj.patch(
+				obj.patch(state, ['game', 'asteroid', 'rot'], state.game.asteroid.rot + 0.5), 
+				['game', 'asteroid', 'pos'], calcNewPosition(state.game.asteroid.pos, state))
+			  )
 );
 
 module.exports = {
