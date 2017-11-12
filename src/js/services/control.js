@@ -25,13 +25,31 @@ const hook = ({state$, actions}) => {
 			force: getForce(keys)
 		}));
 
-	let gameLoop = time.frame().withLatestFrom(state$, directionForce$, (time, state, df) => ({time, state, df}))
+	const getNote = keys => (
+		keys.z && 'C' ||
+		keys.x && 'D' ||
+		keys.c && 'E' ||
+		keys.v && 'F' ||
+		keys.b && 'G' ||
+		keys.n && 'A' ||
+		keys.m && 'H' || '');
+
+	const pressedNotes$ = keyboard.watch(['z', 'x', 'c', 'v', 'b', 'n', 'm']);
+	const note$ = pressedNotes$
+		.map(keys => (console.log('note keys', keys), keys))
+		.map(keys => ({
+			note: getNote(keys)
+		}));
+
+	let gameLoop = time.frame().withLatestFrom(state$, directionForce$, note$, (time, state, df, pn) => ({time, state, df, pn}))
 		// .filter(({df}) => df.force > 0)
-		.subscribe(({time, state, df}) => {
+		.subscribe(({time, state, df, pn}) => {
 			// move
 			// rotate ship
 			if (df.force > 0)
 				actions.rotate(df.direction, df.force);
+			if (pn.note && pn.note != '')
+				console.log('Pressed note:', pn.note);
 		});
 
 	return () => {

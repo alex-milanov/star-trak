@@ -10,6 +10,9 @@ const initial = {
 	game: {
 		ship: {
 			rotation: 0
+		},
+		audio: {
+			note: 'C'
 		}
 	}
 };
