@@ -36,17 +36,17 @@ const update = (node, prefs) => obj.switch(node.type, {
 		isSet(prefs.type) && set(node.output, 'type', prefs.type),
 		isSet(prefs.freq) && set(node.output.frequency, 'value', prefs.freq),
 		isSet(prefs.detune) && set(node.output.detune, 'value', prefs.detune),
-		node
+		Object.assign(node, {prefs})
 	),
 	vca: () => (
 		isSet(prefs.gain) && set(node.through.gain, 'value', prefs.gain),
-		node
+		Object.assign(node, {prefs})
 	),
 	vcf: () => (
 		isSet(prefs.type) && set(node.through, 'type', prefs.type),
 		isSet(prefs.cutoff) && set(node.through.frequency, 'value', cutoffToFreq(prefs.cutoff)),
 		isSet(prefs.resonance) && set(node.through.Q, 'value', prefs.resonance * 30),
-		node
+		Object.assign(node, {prefs})
 	),
 	reverb: () => reverb.update(node, prefs)
 })();
