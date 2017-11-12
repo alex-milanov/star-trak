@@ -32,8 +32,10 @@ const watch = keyList => keyAction$
 	.share();
 
 const on = key => keyDown$.filter(ev => parseKey(ev) === key);
+const off = key => keyUp$.filter(ev => parseKey(ev) === key);
 
 module.exports = {
 	watch,
-	on
+	on,
+	off
 };

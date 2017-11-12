@@ -43,16 +43,25 @@ const hook = ({state$, actions}) => {
 			note: getNote(keys)
 		}));
 
-	let gameLoop = time.frame().withLatestFrom(state$, directionForce$, note$, (time, state, df, pn) => ({time, state, df, pn}))
+	const noteOff$ = keyboard.off('z');
+	//.subscribe(())
+
+	let gameLoop = time.frame().withLatestFrom(state$, directionForce$, note$, noteOff$, (time, state, df, pn, no) => ({time, state, df, pn, no}))
 		// .filter(({df}) => df.force > 0)
-		.subscribe(({time, state, df, pn}) => {
+		.subscribe(({time, state, df, pn, no}) => {
 			// move
 			// rotate ship
 			actions.moveAsteroid();
 			if (df.force > 0)
 				actions.rotate(df.direction, df.force);
-			if (pn.note && pn.note != '')
-				console.log('Pressed note:', pn.note);
+			if (pn.note) {
+				if (pn.note != '')
+					actions.playNote(pn.note);
+			}
+			// if (no) {
+			// 	console.log('Notes off');
+			// 	actions.notesOff();
+			// }
 		});
 
 	detach = () => {

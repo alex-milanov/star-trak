@@ -47,8 +47,8 @@ const noteOn = (synth, note, velocity) => {
 
 	const freq = audio.noteToFrequency(note.key + note.octave);
 
-	if (synth.vco) audio.stop(synth.vco);
-	synth.vco = audio.start(audio.vco(Object.assign({}, synth.vcp.prefs, {freq})));
+	// if (synth.vco) audio.stop(synth.vco);
+	synth.vco = audio.start(audio.vco(Object.assign({}, synth.vco.prefs, {freq})));
 	synth.vco = audio.connect(synth.vco, synth.vca);
 
 	synth.vca.through.gain.cancelScheduledValues(0);
@@ -82,10 +82,25 @@ let detach = () => {};
 const hook = ({state$, actions}) => {
 	state$.subscribe(state => {
 		audio.connect(bank.gameOver.output, audio.context.destination);
-		audio.chain(synth.vco, synth.vca, synth.vcf, synth.reverb, audio.context.destination);
+		audio.chain(synth.vca, synth.vcf, synth.reverb, audio.context.destination);
 		// audio.start(bank.gameOver);
 	});
+
+	state$
+		.distinctUntilChanged(state => state.game.audio.pressed)
+		.map(state => (console.log(state), state))
+		.filter(state => state.game.audio.pressed.length > 0)
+		.map(state => state.game.audio.pressed)
+		.subscribe(pressed => {
+			const note = {
+				key: pressed[pressed.length - 1],
+				octave: 4
+			}
+			console.log('Playing note', note.key);
+			noteOn(synth, note, 0.8);
+		});
 };
+console.log('123');
 
 module.exports = {
 	hook,

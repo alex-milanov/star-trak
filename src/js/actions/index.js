@@ -12,7 +12,8 @@ const initial = {
 			rotation: 0
 		},
 		audio: {
-			note: 'C'
+			note: 'C',
+			pressed: []
 		},
 		settings: {
 			moveSpeed: 1 //pixels per tick
@@ -50,7 +51,7 @@ function calcNewPosition(oldPos, state){
 		let dx = (shipPos.x - oldPos.x)/normFactor * state.game.settings.moveSpeed;
 		let dy = (shipPos.y - oldPos.y)/normFactor * state.game.settings.moveSpeed;
 
-		console.log('x', oldPos.x + dx, 'y', oldPos.y + dy);
+		// console.log('x', oldPos.x + dx, 'y', oldPos.y + dy);
 		return {
 			x: oldPos.x + dx,
 			y: oldPos.y + dy
@@ -64,11 +65,27 @@ function calcNewPosition(oldPos, state){
 	}
 }
 
+function pressedNotes(oldNotes, state, note) {
+	console.log('Pressed note:', note);
+	console.log('oldNotes', oldNotes);
+	// TODO: possibly detect chord	
+	oldNotes.push(note);
+	return oldNotes;
+}
+
 const moveAsteroid = () => (
 	state => (obj.patch(
 				obj.patch(state, ['game', 'asteroid', 'rot'], state.game.asteroid.rot + 0.5), 
 				['game', 'asteroid', 'pos'], calcNewPosition(state.game.asteroid.pos, state))
 			  )
+);
+
+const playNote = (note) => (
+	state => obj.patch(state, ['game', 'audio', 'pressed'], pressedNotes(state.game.audio.pressed, state, note))
+);
+
+const notesOff = () => (
+	state => obj.patch(state, ['game', 'audio', 'pressed'], [])
 );
 
 module.exports = {
@@ -78,5 +95,7 @@ module.exports = {
 	toggle,
 	arrToggle,
 	rotate,
-	moveAsteroid
+	moveAsteroid,
+	playNote,
+	notesOff
 };
