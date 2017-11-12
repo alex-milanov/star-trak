@@ -12,12 +12,12 @@ const initial = {
 			rotation: 0
 		},
 		audio: {
-			note: 'a',
+			note: 'C',
 			pressed: []
 		},
 		settings: {
 			moveSpeed: 1,
-			lifes: 3000,
+			lifes: 4,
 			points: 0
 		},
 		asteroid: {
@@ -55,7 +55,7 @@ function getShipPosition(state){
 }
 
 function newAsteroid(state){
-	const allChords = ['C', 'D', 'E', 'F', 'G', 'A', 'H'];
+	const allChords = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'H4'];
 	const idx = Math.floor(Math.random() * 7);
 	let asteroid = state.game.asteroid;
 	asteroid.pos = { x: 370 + Math.random()*530, y: 50 };
@@ -104,9 +104,8 @@ function changeAsteroid(state){
 
 	asteroid.rot += Math.random()*5;
 
-	if (state.game.audio.note == asteroid.chord){
+	if (state.pressedKeys.indexOf(asteroid.chord)>=0){
 		state.game.settings.points += 100;
-		window.alert('Hit it! Points: ' + state.game.settings.points);
 		return newAsteroid(state);
 	}
 
