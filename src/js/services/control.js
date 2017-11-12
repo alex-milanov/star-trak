@@ -62,13 +62,7 @@ const hook = ({state$, actions}) => {
 		.withLatestFrom(state$, (time, state) => ({time, state}))
 		// .filter(({df}) => df.force > 0)
 		.subscribe(({time, state}) => {
-			// move
-			// rotate ship
 			actions.moveAsteroid();
-			// if (no) {
-			// 	console.log('Notes off');
-			// 	actions.notesOff();
-			// }
 		});
 
 	detach = () => {

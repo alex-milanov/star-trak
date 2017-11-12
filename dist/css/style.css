@@ -2410,7 +2410,9 @@ h1 {
   width: 512px;
   height: 512px;
   left: 50%;
-  margin-left: -256px; }
+  margin-left: -256px;
+  background-image: url("../assets/img/BAckground.png");
+  background-size: cover; }
   #ui #game #ship {
     position: fixed;
     top: 50%;
@@ -2421,6 +2423,12 @@ h1 {
   #ui #game .asteroid {
     position: fixed;
     transform: rotate(0deg);
-    background-image: url("../assets/img/asteroid_states.png");
+    background-image: url("../assets/img/Asteroid_01.png");
     background-position: 0 0;
     background-clip: content-box; }
+  #ui #game #chord {
+    font-size: x-large;
+    padding: 10px; }
+  #ui #game #score {
+    padding-left: 10px;
+    font-size: x-large; }

@@ -12,14 +12,17 @@ const initial = {
 			rotation: 0
 		},
 		audio: {
-			note: 'C',
+			note: 'a',
 			pressed: []
 		},
 		settings: {
-			moveSpeed: 1 // pixels per tick
+			moveSpeed: 1,
+			lifes: 3000,
+			points: 0
 		},
 		asteroid: {
 			pos: {x: 620, y: 50},
+			chord: '0',
 			frame: 0,
 			rot: 0
 		}
@@ -35,10 +38,33 @@ const arrToggle = (key, value) => state =>
 		arr.toggle(obj.sub(state, key), value)
 	);
 
-const rotate = (direction, force) => (console.log(direction, force),
+const rotate = (direction, force) => (
 	state => obj.patch(state, ['game', 'ship', 'rotation'],
 		(state.game.ship.rotation + direction[0] * force) % 360
 	));
+
+function crashShip(state){
+	if (state.game.settings.lifes > 0)
+		--state.game.settings.lifes
+	else
+		window.alert('You are dead!!!');
+}
+
+function getShipPosition(state){
+	return {x: 620, y: 255};
+}
+
+function newAsteroid(state){
+	const allChords = ['C', 'D', 'E', 'F', 'G', 'A', 'H'];
+	const idx = Math.floor(Math.random() * 7);
+	let asteroid = state.game.asteroid;
+	asteroid.pos = { x: 370 + Math.random()*530, y: 50 };
+	asteroid.chord = allChords[idx];
+
+	document.getElementById('chord').innerHTML = (asteroid.chord);
+	document.getElementById('score').innerHTML = (state.game.settings.points) + ' points';
+	return asteroid;
+}
 
 function getShipPosition(state) {
 	return {x: 620, y: 255};
@@ -52,17 +78,15 @@ function calcNewPosition(oldPos, state) {
 		let dx = (shipPos.x - oldPos.x) / normFactor * state.game.settings.moveSpeed;
 		let dy = (shipPos.y - oldPos.y) / normFactor * state.game.settings.moveSpeed;
 
-		// console.log('x', oldPos.x + dx, 'y', oldPos.y + dy);
 		return {
 			x: oldPos.x + dx,
 			y: oldPos.y + dy
 		};
 	}
-
-	return {
-		x: Math.random() * 1000,
-		y: 50
-	};
+	else{
+		crashShip(state);
+		return { x: 0, y: 0 };
+	}
 }
 
 function pressedNotes(oldNotes, state, note) {
@@ -73,11 +97,28 @@ function pressedNotes(oldNotes, state, note) {
 	return oldNotes;
 }
 
+function changeAsteroid(state){
+	let asteroid = state.game.asteroid;
+
+	if (asteroid.chord == '0') return newAsteroid(state);
+
+	asteroid.rot += Math.random()*5;
+
+	if (state.game.audio.note == asteroid.chord){
+		state.game.settings.points += 100;
+		window.alert('Hit it! Points: ' + state.game.settings.points);
+		return newAsteroid(state);
+	}
+
+	asteroid.pos = calcNewPosition(asteroid.pos, state);
+	if (asteroid.pos.y < 4)
+		return newAsteroid(state);
+	else
+		return asteroid;
+}
+
 const moveAsteroid = () => (
-	state => (obj.patch(
-		obj.patch(state, ['game', 'asteroid', 'rot'], state.game.asteroid.rot + 0.5),
-		['game', 'asteroid', 'pos'], calcNewPosition(state.game.asteroid.pos, state))
-	)
+	state => obj.patch(state, ['game', 'asteroid'], changeAsteroid(state))
 );
 
 const playNote = note => (
