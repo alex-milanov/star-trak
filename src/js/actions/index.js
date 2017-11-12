@@ -52,8 +52,14 @@ const move = (direction, force) => (
 	state => obj.patch(state, ['game', 'ship'], {
 		rot: (state.game.ship.rot + direction[0] * force) % 360,
 		pos: {
-			x: state.game.ship.pos.x + Math.cos(degreeToRadiant((state.game.ship.rot - 90) % 360)) * direction[2] * force,
-			y: state.game.ship.pos.y + Math.sin(degreeToRadiant((state.game.ship.rot - 90) % 360)) * direction[2] * force
+			x: (
+				state.viewport.screen.width +
+				state.game.ship.pos.x + Math.cos(degreeToRadiant((state.game.ship.rot - 90) % 360)) * direction[2] * force
+			) % state.viewport.screen.width,
+			y: (
+				state.viewport.screen.height +
+				state.game.ship.pos.y + Math.sin(degreeToRadiant((state.game.ship.rot - 90) % 360)) * direction[2] * force
+			) % state.viewport.screen.height
 		}
 	}));
 
