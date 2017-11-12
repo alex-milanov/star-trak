@@ -16,7 +16,7 @@ const asteroid = ({pos = {x: 20, y: 30}, rot = 0, size = 48, frame = 1, model = 
 			marginTop: `${size / 2}px`,
 			marginLeft: `${size / 2}px`,
 //			backgroundPosition: `${-frame * size}px 0`,
-			backgroundImage: `url('./assets/img/asteroid-0${model}.png')`,
+			backgroundImage: `url('assets/img/asteroid-0${model}.png')`,
 			backgroundSize: `auto ${size}px`,
 			transform: `rotate(${rot}deg)`
 		}
