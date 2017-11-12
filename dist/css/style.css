@@ -2432,3 +2432,6 @@ h1 {
   #ui #game #score {
     padding-left: 10px;
     font-size: x-large; }
+  #ui #game #lifes {
+    padding-left: 10px;
+    font-size: x-large; }

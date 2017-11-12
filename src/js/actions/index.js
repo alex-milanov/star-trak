@@ -24,7 +24,8 @@ const initial = {
 			pos: {x: 620, y: 50},
 			chord: '0',
 			frame: 0,
-			rot: 0
+			rot: 0,
+			hited: false
 		}
 	},
 	pressedKeys: []
@@ -45,7 +46,7 @@ const rotate = (direction, force) => (
 
 function crashShip(state){
 	if (state.game.settings.lifes > 0)
-		--state.game.settings.lifes
+		--state.game.settings.lifes;
 	else
 		window.alert('You are dead!!!');
 }
@@ -60,9 +61,11 @@ function newAsteroid(state){
 	let asteroid = state.game.asteroid;
 	asteroid.pos = { x: 370 + Math.random()*530, y: 50 };
 	asteroid.chord = allChords[idx];
+	asteroid.hited = false;
 
-	document.getElementById('chord').innerHTML = (asteroid.chord);
-	document.getElementById('score').innerHTML = (state.game.settings.points) + ' points';
+	document.getElementById('chord').innerHTML = 'Play: '  + (asteroid.chord);
+	document.getElementById('score').innerHTML = 'Score: ' + (state.game.settings.points) + ' points';
+	document.getElementById('lifes').innerHTML = 'Lifes: ' + (state.game.settings.lifes);
 	return asteroid;
 }
 
@@ -100,13 +103,14 @@ function pressedNotes(oldNotes, state, note) {
 function changeAsteroid(state){
 	let asteroid = state.game.asteroid;
 
-	if (asteroid.chord == '0') return newAsteroid(state);
+	if (asteroid.hited || asteroid.chord == '0') return newAsteroid(state);
 
 	asteroid.rot += Math.random()*5;
 
 	if (state.pressedKeys.indexOf(asteroid.chord)>=0){
+		asteroid.hited = true;
 		state.game.settings.points += 100;
-		return newAsteroid(state);
+		return asteroid;
 	}
 
 	asteroid.pos = calcNewPosition(asteroid.pos, state);

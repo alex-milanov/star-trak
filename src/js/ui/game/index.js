@@ -37,5 +37,10 @@ module.exports = ({state, actions}) => section('#game', [
 	p('#score', 
 		{style: {
 		}
+	}),
+	p('#lifes', 
+		{style: {
+		}
 	})
 ]);
+
