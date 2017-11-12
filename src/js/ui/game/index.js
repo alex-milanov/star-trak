@@ -23,7 +23,7 @@ const asteroid = ({pos = {x: 20, y: 30}, rot = 0, size = 48, frame = 1}) =>
 
 module.exports = ({state, actions}) => section('#game', [
 	asteroid({rot: state.game.asteroid.rot, pos: state.game.asteroid.pos}),
-	img('#ship[src="assets/img/ship.svg"]', {
+	img('#ship[src="assets/img/Space_Ship.png"]', {
 		style: {
 			width: '64px',
 			height: '64px',

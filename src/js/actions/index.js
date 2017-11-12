@@ -20,7 +20,7 @@ const initial = {
 		},
 		asteroid:{
 			pos: {x: 620, y: 50},
-			chord: 'A',
+			chord: 'C',
 			frame: 0,
 			rot: 0
 		}
@@ -35,7 +35,7 @@ const arrToggle = (key, value) => state =>
 		arr.toggle(obj.sub(state, key), value)
 	);
 
-const rotate = (direction, force) => (console.log(direction, force),
+const rotate = (direction, force) => (
 	state => obj.patch(state, ['game', 'ship', 'rotation'],
 		(state.game.ship.rotation + direction[0] * force) % 360
 	));
@@ -60,7 +60,6 @@ function calcNewPosition(oldPos, state){
 		let dx = (shipPos.x - oldPos.x)/normFactor * state.game.settings.moveSpeed;
 		let dy = (shipPos.y - oldPos.y)/normFactor * state.game.settings.moveSpeed;
 
-		console.log('x', oldPos.x + dx, 'y', oldPos.y + dy);
 		return {
 			x: oldPos.x + dx,
 			y: oldPos.y + dy
@@ -81,20 +80,21 @@ function changeAsteroid(state){
 	asteroid.rot += 0.5;
 	if (state.game.audio.note == asteroid.chord){
 		if (asteroid.frame > 4){
-			state.audio.note = '0';
+			asteroid.chord = '0';
 		}
 		else {
-			++asteroid.frame;
+			asteroid.frame = asteroid.frame+1;
+			console.log('----------->', asteroid);
+			state.game.audio.note = '0';
 		}
 	}
 	asteroid.pos = calcNewPosition(asteroid.pos, state);
-	console.log('------------>', asteroid);
 	return asteroid;
 }
 
 const moveAsteroid = () => (
-	state => obj.patch(state, ['game', 'asteroid'], changeAsteroid(state)
-));
+	state => obj.patch(state, ['game', 'asteroid'], changeAsteroid(state))
+);
 
 module.exports = {
 	initial,
