@@ -8,8 +8,10 @@ const {
 // components
 const header = require('./header');
 const game = require('./game');
+const midiKeyboard = require('./midi-keyboard');
 
 module.exports = ({state, actions}) => section('#ui', [
 	header({state, actions}),
-	game({state, actions})
+	game({state, actions}),
+	midiKeyboard({state, actions})
 ]);

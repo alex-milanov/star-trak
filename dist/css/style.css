@@ -2410,7 +2410,7 @@ h1 {
   top: 0px;
   left: 0px;
   right: 0px;
-  bottom: 0px;
+  bottom: 100px;
   background-size: cover; }
   #ui #game #ship {
     position: fixed;
@@ -2429,3 +2429,49 @@ h1 {
   #ui #game #lifes {
     padding-left: 10px;
     font-size: x-large; }
+
+#ui .midi-keyboard {
+  width: 100%;
+  position: fixed;
+  height: 100px;
+  bottom: 10px;
+  left: 10px; }
+  #ui .midi-keyboard .body .keys {
+    height: 100px;
+    vertical-align: top; }
+    #ui .midi-keyboard .body .keys > * {
+      display: inline-block;
+      vertical-align: top;
+      border: 1px solid #777;
+      border-top: 0px;
+      box-sizing: border-box;
+      float: left;
+      position: relative;
+      cursor: pointer; }
+      #ui .midi-keyboard .body .keys > * > span {
+        position: absolute;
+        bottom: 2px;
+        width: 100%;
+        text-align: center;
+        color: #777; }
+    #ui .midi-keyboard .body .keys .white {
+      width: 3.57%;
+      height: 100%;
+      background: #fff;
+      color: #000;
+      z-index: 0; }
+      #ui .midi-keyboard .body .keys .white:hover, #ui .midi-keyboard .body .keys .white.on {
+        background: #578; }
+    #ui .midi-keyboard .body .keys .black {
+      width: 2%;
+      height: 65%;
+      background: #000;
+      color: white;
+      margin: 0px;
+      z-index: 99; }
+      #ui .midi-keyboard .body .keys .black:not(:first-child) {
+        margin-left: -1%; }
+      #ui .midi-keyboard .body .keys .black:hover {
+        background: #111; }
+      #ui .midi-keyboard .body .keys .black + .white {
+        margin-left: -1%; }
