@@ -6,9 +6,12 @@ const {
 	section, button, span
 } = require('iblokz-snabbdom-helpers');
 // components
-const counter = require('./counter');
+const header = require('./header');
+const game = require('./game');
+const midiKeyboard = require('./midi-keyboard');
 
 module.exports = ({state, actions}) => section('#ui', [
-	h1('UI Boilerplate'),
-	counter({state, actions})
+	header({state, actions}),
+	game({state, actions}),
+	midiKeyboard({state, actions})
 ]);

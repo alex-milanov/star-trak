@@ -1,0 +1,47 @@
+.midi-keyboard
+	width: 100%
+	position: fixed
+	height: 100px
+	bottom: 10px
+	left: 10px
+	.body
+		.keys
+			height: 100px
+			vertical-align: top
+			> *
+				display: inline-block
+				vertical-align: top
+				border: 1px solid #777
+				border-top: 0px
+				box-sizing: border-box
+				float: left
+				position: relative
+				cursor: pointer
+				> span
+					position: absolute
+					bottom: 2px
+					width: 100%
+					text-align: center
+					color: #777
+
+			.white
+				width: 3.57%
+				height: 100%
+				background: #fff
+				color: #000
+				z-index: 0
+				&:hover, &.on
+					background: #578
+			.black
+				width: 2%
+				height: 65%
+				background: #000
+				color: white
+				margin: 0px
+				&:not(:first-child)
+					margin-left: -1%
+				z-index: 99
+				&:hover
+					background: #111
+				& + .white
+					margin-left: -1%
